@@ -73,98 +73,41 @@ if 'dados_risco' not in st.session_state:
 
   st.session_state.dados_risco = dados_risco_carregados
 
+# Dados originais da Torre Multi (EM DOCA, EM TRANSITO, CHEGADA NO CLIENTE, FINALIZADO)
 if 'dados_torre' not in st.session_state:
   st.session_state.dados_torre = dados_firebase.get(
       'dados_torre',
       [
-          {
-              'CLIENTE': 'Amazon',
-              'QTD': 42,
-              'NO_PRAZO': 40,
-              'ATR_ORIG': 1,
-              'ATR_DEST': 1,
-              'NO_SHOW': 0,
-          },
-          {
-              'CLIENTE': 'Imile',
-              'QTD': 28,
-              'NO_PRAZO': 25,
-              'ATR_ORIG': 2,
-              'ATR_DEST': 1,
-              'NO_SHOW': 0,
-          },
-          {
-              'CLIENTE': 'Decathlon',
-              'QTD': 18,
-              'NO_PRAZO': 18,
-              'ATR_ORIG': 0,
-              'ATR_DEST': 0,
-              'NO_SHOW': 0,
-          },
-          {
-              'CLIENTE': 'Loggi',
-              'QTD': 35,
-              'NO_PRAZO': 31,
-              'ATR_ORIG': 2,
-              'ATR_DEST': 2,
-              'NO_SHOW': 0,
-          },
-          {
-              'CLIENTE': 'Plural',
-              'QTD': 12,
-              'NO_PRAZO': 11,
-              'ATR_ORIG': 0,
-              'ATR_DEST': 1,
-              'NO_SHOW': 0,
-          },
-          {
-              'CLIENTE': 'Brasil Gráfica',
-              'QTD': 9,
-              'NO_PRAZO': 8,
-              'ATR_ORIG': 0,
-              'ATR_DEST': 1,
-              'NO_SHOW': 0,
-          },
-          {
-              'CLIENTE': 'Total Meli',
-              'QTD': 54,
-              'NO_PRAZO': 48,
-              'ATR_ORIG': 3,
-              'ATR_DEST': 2,
-              'NO_SHOW': 1,
-          },
-          {
-              'CLIENTE': 'Carrossel J&T',
-              'QTD': 22,
-              'NO_PRAZO': 20,
-              'ATR_ORIG': 1,
-              'ATR_DEST': 0,
-              'NO_SHOW': 1,
-          },
-          {
-              'CLIENTE': 'ANJUN',
-              'QTD': 15,
-              'NO_PRAZO': 13,
-              'ATR_ORIG': 1,
-              'ATR_DEST': 1,
-              'NO_SHOW': 0,
-          },
-          {
-              'CLIENTE': 'Americanas',
-              'QTD': 31,
-              'NO_PRAZO': 27,
-              'ATR_ORIG': 2,
-              'ATR_DEST': 1,
-              'NO_SHOW': 1,
-          },
-          {
-              'CLIENTE': 'Word Post',
-              'QTD': 11,
-              'NO_PRAZO': 10,
-              'ATR_ORIG': 0,
-              'ATR_DEST': 0,
-              'NO_SHOW': 1,
-          },
+          {'CLIENTE': 'Amazon', 'QTD': 42, 'EM_DOCA': 40, 'EM_TRANSITO': 1, 'CHEGADA_NO_CLIENTE': 1, 'FINALIZADO': 0},
+          {'CLIENTE': 'Imile', 'QTD': 28, 'EM_DOCA': 25, 'EM_TRANSITO': 2, 'CHEGADA_NO_CLIENTE': 1, 'FINALIZADO': 0},
+          {'CLIENTE': 'Decathlon', 'QTD': 18, 'EM_DOCA': 18, 'EM_TRANSITO': 0, 'CHEGADA_NO_CLIENTE': 0, 'FINALIZADO': 0},
+          {'CLIENTE': 'Loggi', 'QTD': 35, 'EM_DOCA': 31, 'EM_TRANSITO': 2, 'CHEGADA_NO_CLIENTE': 2, 'FINALIZADO': 0},
+          {'CLIENTE': 'Plural', 'QTD': 12, 'EM_DOCA': 11, 'EM_TRANSITO': 0, 'CHEGADA_NO_CLIENTE': 1, 'FINALIZADO': 0},
+          {'CLIENTE': 'Brasil Gráfica', 'QTD': 9, 'EM_DOCA': 8, 'EM_TRANSITO': 0, 'CHEGADA_NO_CLIENTE': 1, 'FINALIZADO': 0},
+          {'CLIENTE': 'Total Meli', 'QTD': 54, 'EM_DOCA': 48, 'EM_TRANSITO': 3, 'CHEGADA_NO_CLIENTE': 2, 'FINALIZADO': 1},
+          {'CLIENTE': 'Carrossel J&T', 'QTD': 22, 'EM_DOCA': 20, 'EM_TRANSITO': 1, 'CHEGADA_NO_CLIENTE': 0, 'FINALIZADO': 1},
+          {'CLIENTE': 'ANJUN', 'QTD': 15, 'EM_DOCA': 13, 'EM_TRANSITO': 1, 'CHEGADA_NO_CLIENTE': 1, 'FINALIZADO': 0},
+          {'CLIENTE': 'Americanas', 'QTD': 31, 'EM_DOCA': 27, 'EM_TRANSITO': 2, 'CHEGADA_NO_CLIENTE': 1, 'FINALIZADO': 1},
+          {'CLIENTE': 'Word Post', 'QTD': 11, 'EM_DOCA': 10, 'EM_TRANSITO': 0, 'CHEGADA_NO_CLIENTE': 0, 'FINALIZADO': 1},
+      ],
+  )
+
+# Nova estrutura com os novos status pedidos
+if 'dados_torre_status' not in st.session_state:
+  st.session_state.dados_torre_status = dados_firebase.get(
+      'dados_torre_status',
+      [
+          {'CLIENTE': 'Amazon', 'QTD': 42, 'NO_PRAZO': 40, 'ATR_ORIG': 1, 'ATR_DEST': 1, 'NO_SHOW': 0},
+          {'CLIENTE': 'Imile', 'QTD': 28, 'NO_PRAZO': 25, 'ATR_ORIG': 2, 'ATR_DEST': 1, 'NO_SHOW': 0},
+          {'CLIENTE': 'Decathlon', 'QTD': 18, 'NO_PRAZO': 18, 'ATR_ORIG': 0, 'ATR_DEST': 0, 'NO_SHOW': 0},
+          {'CLIENTE': 'Loggi', 'QTD': 35, 'NO_PRAZO': 31, 'ATR_ORIG': 2, 'ATR_DEST': 2, 'NO_SHOW': 0},
+          {'CLIENTE': 'Plural', 'QTD': 12, 'NO_PRAZO': 11, 'ATR_ORIG': 0, 'ATR_DEST': 1, 'NO_SHOW': 0},
+          {'CLIENTE': 'Brasil Gráfica', 'QTD': 9, 'NO_PRAZO': 8, 'ATR_ORIG': 0, 'ATR_DEST': 1, 'NO_SHOW': 0},
+          {'CLIENTE': 'Total Meli', 'QTD': 54, 'NO_PRAZO': 48, 'ATR_ORIG': 3, 'ATR_DEST': 2, 'NO_SHOW': 1},
+          {'CLIENTE': 'Carrossel J&T', 'QTD': 22, 'NO_PRAZO': 20, 'ATR_ORIG': 1, 'ATR_DEST': 0, 'NO_SHOW': 1},
+          {'CLIENTE': 'ANJUN', 'QTD': 15, 'NO_PRAZO': 13, 'ATR_ORIG': 1, 'ATR_DEST': 1, 'NO_SHOW': 0},
+          {'CLIENTE': 'Americanas', 'QTD': 31, 'NO_PRAZO': 27, 'ATR_ORIG': 2, 'ATR_DEST': 1, 'NO_SHOW': 1},
+          {'CLIENTE': 'Word Post', 'QTD': 11, 'NO_PRAZO': 10, 'ATR_ORIG': 0, 'ATR_DEST': 0, 'NO_SHOW': 1},
       ],
   )
 
@@ -433,15 +376,15 @@ def render_barra_empilhada(v1, v2, chart_key):
   )
 
 
-def render_barra_empilhada_torre(v_np, v_ao, v_ad, v_ns, chart_key):
+def render_barra_empilhada_torre(v1, v2, v3, v4, chart_key):
   fig = go.Figure()
   fig.add_trace(
       go.Bar(
           y=['GERAL'],
-          x=[v_np],
+          x=[v1],
           orientation='h',
           width=0.6,
-          text=[f'{v_np}' if v_np > 0 else ''],
+          text=[f'{v1}' if v1 > 0 else ''],
           textposition='inside',
           insidetextanchor='middle',
           textfont=dict(color='#000000', size=13, family='sans-serif'),
@@ -451,10 +394,10 @@ def render_barra_empilhada_torre(v_np, v_ao, v_ad, v_ns, chart_key):
   fig.add_trace(
       go.Bar(
           y=['GERAL'],
-          x=[v_ao],
+          x=[v2],
           orientation='h',
           width=0.6,
-          text=[f'{v_ao}' if v_ao > 0 else ''],
+          text=[f'{v2}' if v2 > 0 else ''],
           textposition='inside',
           insidetextanchor='middle',
           textfont=dict(color='#000000', size=13, family='sans-serif'),
@@ -464,10 +407,10 @@ def render_barra_empilhada_torre(v_np, v_ao, v_ad, v_ns, chart_key):
   fig.add_trace(
       go.Bar(
           y=['GERAL'],
-          x=[v_ad],
+          x=[v3],
           orientation='h',
           width=0.6,
-          text=[f'{v_ad}' if v_ad > 0 else ''],
+          text=[f'{v3}' if v3 > 0 else ''],
           textposition='inside',
           insidetextanchor='middle',
           textfont=dict(color='#ffffff', size=13, family='sans-serif'),
@@ -477,10 +420,10 @@ def render_barra_empilhada_torre(v_np, v_ao, v_ad, v_ns, chart_key):
   fig.add_trace(
       go.Bar(
           y=['GERAL'],
-          x=[v_ns],
+          x=[v4],
           orientation='h',
           width=0.6,
-          text=[f'{v_ns}' if v_ns > 0 else ''],
+          text=[f'{v4}' if v4 > 0 else ''],
           textposition='inside',
           insidetextanchor='middle',
           textfont=dict(color='#ffffff', size=13, family='sans-serif'),
@@ -779,9 +722,8 @@ def render_tab_content(state_key, prefix_key):
   st.markdown('</div>', unsafe_allow_html=True)
 
 
-# Renderização da Aba TORRE MULTI
+# Renderização da Aba TORRE MULTI (Original)
 def render_torre_multi():
-  # Cálculo dos totais
   tot_qtd = sum(item.get("QTD", 0) for item in st.session_state.dados_torre)
   tot_em_doca = sum(
       item.get("EM_DOCA", 0) for item in st.session_state.dados_torre
@@ -1051,6 +993,277 @@ def render_torre_multi():
   st.markdown("</div>", unsafe_allow_html=True)
 
 
+# Nova Renderização da Aba TORRE MULTI STATUS (com os novos campos)
+def render_torre_multi_status():
+  tot_qtd = sum(item.get("QTD", 0) for item in st.session_state.dados_torre_status)
+  tot_no_prazo = sum(
+      item.get("NO_PRAZO", 0) for item in st.session_state.dados_torre_status
+  )
+  tot_atr_orig = sum(
+      item.get("ATR_ORIG", 0) for item in st.session_state.dados_torre_status
+  )
+  tot_atr_dest = sum(
+      item.get("ATR_DEST", 0) for item in st.session_state.dados_torre_status
+  )
+  tot_no_show = sum(
+      item.get("NO_SHOW", 0) for item in st.session_state.dados_torre_status
+  )
+
+  perf_geral = (tot_no_prazo / tot_qtd * 100) if tot_qtd > 0 else 0.0
+
+  # Cards Resumo Topo
+  c1, c2, c3, c4, c5, c6 = st.columns(6)
+  c1.markdown(
+      f"""
+        <div class="kpi-card">
+            <div class="kpi-title">QTD</div>
+            <div class="kpi-value">{tot_qtd}</div>
+            <div class="kpi-bar-white"></div>
+        </div>
+    """,
+      unsafe_allow_html=True,
+  )
+
+  c2.markdown(
+      f"""
+        <div class="kpi-card">
+            <div class="kpi-title">NO PRAZO</div>
+            <div class="kpi-value-green">{tot_no_prazo}</div>
+        </div>
+    """,
+      unsafe_allow_html=True,
+  )
+
+  c3.markdown(
+      f"""
+        <div class="kpi-card">
+            <div class="kpi-title">ATRASO ORIGEM</div>
+            <div class="kpi-value-yellow">{tot_atr_orig}</div>
+        </div>
+    """,
+      unsafe_allow_html=True,
+  )
+
+  c4.markdown(
+      f"""
+        <div class="kpi-card">
+            <div class="kpi-title">ATRASO DESTINO</div>
+            <div class="kpi-value-orange">{tot_atr_dest}</div>
+        </div>
+    """,
+      unsafe_allow_html=True,
+  )
+
+  c5.markdown(
+      f"""
+        <div class="kpi-card">
+            <div class="kpi-title">NO SHOW</div>
+            <div class="kpi-value-red">{tot_no_show}</div>
+        </div>
+    """,
+      unsafe_allow_html=True,
+  )
+
+  c6.markdown(
+      f"""
+        <div class="kpi-card">
+            <div class="kpi-title">PERFORMANCE</div>
+            <div class="kpi-value-green">{perf_geral:.1f}%</div>
+            <div class="kpi-bar-green"></div>
+        </div>
+    """,
+      unsafe_allow_html=True,
+  )
+
+  st.markdown(
+      "<div style='margin-bottom: 16px;'></div>", unsafe_allow_html=True
+  )
+
+  # Gráficos
+  st.markdown(
+      """
+        <div class="charts-card">
+            <div class="charts-header">
+                <div class="charts-title">DISTRIBUIÇÃO DE OCORRÊNCIAS POR STATUS</div>
+                <div class="charts-legend">
+                    <span style="color:#00e676;">● NO PRAZO</span>
+                    <span style="color:#ffeb3b;">● ATRASO ORIGEM</span>
+                    <span style="color:#ff9800;">● ATRASO DESTINO</span>
+                    <span style="color:#ff5252;">● NO SHOW</span>
+                </div>
+            </div>
+    """,
+      unsafe_allow_html=True,
+  )
+
+  render_barra_empilhada_torre(
+      tot_no_prazo,
+      tot_atr_orig,
+      tot_atr_dest,
+      tot_no_show,
+      "stack_bar_torre_status",
+  )
+  st.markdown(
+      "<div style='margin-bottom: 20px;'></div>", unsafe_allow_html=True
+  )
+
+  dados_proc_torre = []
+  for item in st.session_state.dados_torre_status:
+    qtd = item.get("QTD", 0)
+    no_prazo = item.get("NO_PRAZO", 0)
+    perc = (no_prazo / qtd * 100) if qtd > 0 else 0.0
+    dados_proc_torre.append({
+        "CLIENTE": item.get("CLIENTE", ""),
+        "REALIZADAS": no_prazo,
+        "PENDENTES": max(0, qtd - no_prazo),
+        "%": perc,
+    })
+
+  render_mini_barras(dados_proc_torre, "torre_status")
+  st.markdown("</div>", unsafe_allow_html=True)
+
+  # Tabela
+  st.markdown('<div class="card-floating">', unsafe_allow_html=True)
+
+  h1, h2, h3, h4, h5, h6, h7 = st.columns([2.2, 1.0, 1.0, 1.1, 1.1, 1.0, 2.0])
+  h1.markdown('<div class="th-title">CLIENTE</div>', unsafe_allow_html=True)
+  h2.markdown(
+      '<div class="th-title" style="text-align:center;">QTD</div>',
+      unsafe_allow_html=True,
+  )
+  h3.markdown(
+      '<div class="th-title" style="text-align:center;"><span'
+      ' style="color:#00e676;">●</span> NO PRAZO</div>',
+      unsafe_allow_html=True,
+  )
+  h4.markdown(
+      '<div class="th-title" style="text-align:center;"><span'
+      ' style="color:#ffeb3b;">●</span> ATR. ORIGEM</div>',
+      unsafe_allow_html=True,
+  )
+  h5.markdown(
+      '<div class="th-title" style="text-align:center;"><span'
+      ' style="color:#ff9800;">●</span> ATR. DESTINO</div>',
+      unsafe_allow_html=True,
+  )
+  h6.markdown(
+      '<div class="th-title" style="text-align:center;"><span'
+      ' style="color:#ff5252;">●</span> NO SHOW</div>',
+      unsafe_allow_html=True,
+  )
+  h7.markdown('<div class="th-title">%</div>', unsafe_allow_html=True)
+
+  st.markdown(
+      "<div style='margin-bottom: 12px;'></div>", unsafe_allow_html=True
+  )
+
+  for idx, item in enumerate(st.session_state.dados_torre_status):
+    col_cli, col_qtd, col_np, col_ao, col_ad, col_ns, col_perc = (
+        st.columns([2.2, 1.0, 1.0, 1.1, 1.1, 1.0, 2.0])
+    )
+
+    qtd = item.get("QTD", 0)
+    no_prazo = item.get("NO_PRAZO", 0)
+    atr_orig = item.get("ATR_ORIG", 0)
+    atr_dest = item.get("ATR_DEST", 0)
+    no_show = item.get("NO_SHOW", 0)
+
+    perc = (no_prazo / qtd * 100) if qtd > 0 else 0.0
+    _, cor_bar, _ = get_status_e_cor(perc)
+
+    with col_cli:
+      st.markdown(
+          "<div style='padding-top:8px; font-weight:700;"
+          f" font-size:13px;'>{item.get('CLIENTE', '')}</div>",
+          unsafe_allow_html=True,
+      )
+
+    with col_qtd:
+      v = st.number_input(
+          "",
+          min_value=0,
+          value=qtd,
+          key=f"ts_qtd_{idx}",
+          label_visibility="collapsed",
+      )
+      if v != qtd:
+        st.session_state.dados_torre_status[idx]["QTD"] = v
+        salvar_dados("dados_torre_status", st.session_state.dados_torre_status)
+        st.rerun()
+
+    with col_np:
+      v = st.number_input(
+          "",
+          min_value=0,
+          max_value=qtd,
+          value=min(no_prazo, qtd),
+          key=f"ts_np_{idx}",
+          label_visibility="collapsed",
+      )
+      if v != no_prazo:
+        st.session_state.dados_torre_status[idx]["NO_PRAZO"] = v
+        salvar_dados("dados_torre_status", st.session_state.dados_torre_status)
+        st.rerun()
+
+    with col_ao:
+      v = st.number_input(
+          "",
+          min_value=0,
+          value=atr_orig,
+          key=f"ts_ao_{idx}",
+          label_visibility="collapsed",
+      )
+      if v != atr_orig:
+        st.session_state.dados_torre_status[idx]["ATR_ORIG"] = v
+        salvar_dados("dados_torre_status", st.session_state.dados_torre_status)
+        st.rerun()
+
+    with col_ad:
+      v = st.number_input(
+          "",
+          min_value=0,
+          value=atr_dest,
+          key=f"ts_ad_{idx}",
+          label_visibility="collapsed",
+      )
+      if v != atr_dest:
+        st.session_state.dados_torre_status[idx]["ATR_DEST"] = v
+        salvar_dados("dados_torre_status", st.session_state.dados_torre_status)
+        st.rerun()
+
+    with col_ns:
+      v = st.number_input(
+          "",
+          min_value=0,
+          value=no_show,
+          key=f"ts_ns_{idx}",
+          label_visibility="collapsed",
+      )
+      if v != no_show:
+        st.session_state.dados_torre_status[idx]["NO_SHOW"] = v
+        salvar_dados("dados_torre_status", st.session_state.dados_torre_status)
+        st.rerun()
+
+    with col_perc:
+      st.markdown(
+          f"""
+                <div style="padding-top:8px; display:flex; align-items:center; gap:12px;">
+                    <div class="progress-bar-bg">
+                        <div class="progress-bar-fill" style="width:{perc}%; background-color:{cor_bar};"></div>
+                    </div>
+                    <span style="font-size:12px; font-weight:800; color:{cor_bar}; min-width:42px;">{perc:.1f}%</span>
+                </div>
+            """,
+          unsafe_allow_html=True,
+      )
+
+    st.markdown(
+        "<div style='margin-bottom: 8px;'></div>", unsafe_allow_html=True
+    )
+
+  st.markdown("</div>", unsafe_allow_html=True)
+
+
 # Header Principal
 st.markdown(
     """
@@ -1067,7 +1280,7 @@ st.markdown(
     unsafe_allow_html=True,
 )
 
-tab1, tab2, tab3 = st.tabs(["CADASTRO", "GER. RISCO", "TORRE MULTI"])
+tab1, tab2, tab3, tab4 = st.tabs(["CADASTRO", "GER. RISCO", "TORRE MULTI", "TORRE MULTI STATUS"])
 
 with tab1:
   render_tab_content("dados_cad", "cad")
@@ -1077,3 +1290,6 @@ with tab2:
 
 with tab3:
   render_torre_multi()
+
+with tab4:
+  render_torre_multi_status()
