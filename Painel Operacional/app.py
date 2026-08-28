@@ -51,7 +51,7 @@ if 'dados_cad' not in st.session_state:
   )
 
 if 'dados_risco' not in st.session_state:
-  st.session_state.dados_risco = dados_firebase.get(
+  dados_risco_carregados = dados_firebase.get(
       'dados_risco',
       [
           {'CLIENTE': 'SM', 'QTD': 50, 'REALIZADAS': 45},
@@ -62,6 +62,16 @@ if 'dados_risco' not in st.session_state:
           {'CLIENTE': 'CANCELADO', 'QTD': 0, 'REALIZADAS': 0},
       ],
   )
+
+  # Garante que "CANCELADO" exista mesmo se os dados vierem do Firebase sem ele
+  clientes_existentes = [x['CLIENTE'] for x in dados_risco_carregados]
+  if 'CANCELADO' not in clientes_existentes:
+    dados_risco_carregados.append(
+        {'CLIENTE': 'CANCELADO', 'QTD': 0, 'REALIZADAS': 0}
+    )
+    salvar_dados('dados_risco', dados_risco_carregados)
+
+  st.session_state.dados_risco = dados_risco_carregados
 
 if 'dados_torre' not in st.session_state:
   st.session_state.dados_torre = dados_firebase.get(
