@@ -771,10 +771,10 @@ def render_tab_content(state_key, prefix_key):
 # Renderização da Aba TORRE MULTI
 def render_torre_multi():
   tot_qtd = sum(item['QTD'] for item in st.session_state.dados_torre)
-  tot_no_prazo = sum(item['NO_PRAZO'] for item in st.session_state.dados_torre)
-  tot_atr_orig = sum(item['ATR_ORIG'] for item in st.session_state.dados_torre)
-  tot_atr_dest = sum(item['ATR_DEST'] for item in st.session_state.dados_torre)
-  tot_no_show = sum(item['NO_SHOW'] for item in st.session_state.dados_torre)
+  tot_no_prazo = sum(item['EM_DOCA'] for item in st.session_state.dados_torre)
+  tot_atr_orig = sum(item['EM_TRANSITO'] for item in st.session_state.dados_torre)
+  tot_atr_dest = sum(item['CHEGADA_DESTINO'] for item in st.session_state.dados_torre)
+  tot_no_show = sum(item['FINALIZADO'] for item in st.session_state.dados_torre)
 
   perf_geral = (tot_no_prazo / tot_qtd * 100) if tot_qtd > 0 else 0.0
 
