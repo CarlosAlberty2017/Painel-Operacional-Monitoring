@@ -59,6 +59,7 @@ if 'dados_risco' not in st.session_state:
           {'CLIENTE': 'Checklists', 'QTD': 80, 'REALIZADAS': 75},
           {'CLIENTE': 'SM Forçadas', 'QTD': 20, 'REALIZADAS': 15},
           {'CLIENTE': 'Monitoring', 'QTD': 100, 'REALIZADAS': 92},
+          {'CLIENTE': 'CANCELADO', 'QTD': 0, 'REALIZADAS': 0},
       ],
   )
 
