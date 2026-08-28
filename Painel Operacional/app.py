@@ -770,13 +770,22 @@ def render_tab_content(state_key, prefix_key):
 
 # Renderização da Aba TORRE MULTI
 def render_torre_multi():
-  tot_qtd = sum(item['QTD'] for item in st.session_state.dados_torre)
-  tot_no_prazo = sum(item['EM_DOCA'] for item in st.session_state.dados_torre)
-  tot_atr_orig = sum(item['EM_TRANSITO'] for item in st.session_state.dados_torre)
-  tot_atr_dest = sum(item['CHEGADA_DESTINO'] for item in st.session_state.dados_torre)
-  tot_no_show = sum(item['FINALIZADO'] for item in st.session_state.dados_torre)
+  # Cálculo dos totais
+  tot_qtd = sum(item.get("QTD", 0) for item in st.session_state.dados_torre)
+  tot_em_doca = sum(
+      item.get("EM_DOCA", 0) for item in st.session_state.dados_torre
+  )
+  tot_em_transito = sum(
+      item.get("EM_TRANSITO", 0) for item in st.session_state.dados_torre
+  )
+  tot_chegada_cliente = sum(
+      item.get("CHEGADA_NO_CLIENTE", 0) for item in st.session_state.dados_torre
+  )
+  tot_finalizado = sum(
+      item.get("FINALIZADO", 0) for item in st.session_state.dados_torre
+  )
 
-  perf_geral = (tot_no_prazo / tot_qtd * 100) if tot_qtd > 0 else 0.0
+  perf_geral = (tot_em_doca / tot_qtd * 100) if tot_qtd > 0 else 0.0
 
   # Cards Resumo Topo
   c1, c2, c3, c4, c5, c6 = st.columns(6)
@@ -794,8 +803,8 @@ def render_torre_multi():
   c2.markdown(
       f"""
         <div class="kpi-card">
-            <div class="kpi-title">NO PRAZO</div>
-            <div class="kpi-value-green">{tot_no_prazo}</div>
+            <div class="kpi-title">EM DOCA</div>
+            <div class="kpi-value-green">{tot_em_doca}</div>
         </div>
     """,
       unsafe_allow_html=True,
@@ -804,8 +813,8 @@ def render_torre_multi():
   c3.markdown(
       f"""
         <div class="kpi-card">
-            <div class="kpi-title">ATR ORIG</div>
-            <div class="kpi-value-yellow">{tot_atr_orig}</div>
+            <div class="kpi-title">EM TRANSITO</div>
+            <div class="kpi-value-yellow">{tot_em_transito}</div>
         </div>
     """,
       unsafe_allow_html=True,
@@ -814,8 +823,8 @@ def render_torre_multi():
   c4.markdown(
       f"""
         <div class="kpi-card">
-            <div class="kpi-title">ATR DEST</div>
-            <div class="kpi-value-orange">{tot_atr_dest}</div>
+            <div class="kpi-title">CHEGADA NO CLIENTE</div>
+            <div class="kpi-value-orange">{tot_chegada_cliente}</div>
         </div>
     """,
       unsafe_allow_html=True,
@@ -824,8 +833,8 @@ def render_torre_multi():
   c5.markdown(
       f"""
         <div class="kpi-card">
-            <div class="kpi-title">NO SHOW</div>
-            <div class="kpi-value-red">{tot_no_show}</div>
+            <div class="kpi-title">FINALIZADO</div>
+            <div class="kpi-value-red">{tot_finalizado}</div>
         </div>
     """,
       unsafe_allow_html=True,
@@ -853,10 +862,10 @@ def render_torre_multi():
             <div class="charts-header">
                 <div class="charts-title">DISTRIBUIÇÃO DE OCORRÊNCIAS POR STATUS</div>
                 <div class="charts-legend">
-                    <span style="color:#00e676;">● NO PRAZO</span>
-                    <span style="color:#ffeb3b;">● ATRASO ORIGEM</span>
-                    <span style="color:#ff9800;">● ATRASO DESTINO</span>
-                    <span style="color:#ff5252;">● NO SHOW</span>
+                    <span style="color:#00e676;">● EM DOCA</span>
+                    <span style="color:#ffeb3b;">● EM TRANSITO</span>
+                    <span style="color:#ff9800;">● CHEGADA NO CLIENTE</span>
+                    <span style="color:#ff5252;">● FINALIZADO</span>
                 </div>
             </div>
     """,
@@ -864,7 +873,11 @@ def render_torre_multi():
   )
 
   render_barra_empilhada_torre(
-      tot_no_prazo, tot_atr_orig, tot_atr_dest, tot_no_show, 'stack_bar_torre'
+      tot_em_doca,
+      tot_em_transito,
+      tot_chegada_cliente,
+      tot_finalizado,
+      "stack_bar_torre",
   )
   st.markdown(
       "<div style='margin-bottom: 20px;'></div>", unsafe_allow_html=True
@@ -872,23 +885,23 @@ def render_torre_multi():
 
   dados_proc_torre = []
   for item in st.session_state.dados_torre:
-    perc = (item['NO_PRAZO'] / item['QTD'] * 100) if item['QTD'] > 0 else 0.0
+    qtd = item.get("QTD", 0)
+    em_doca = item.get("EM_DOCA", 0)
+    perc = (em_doca / qtd * 100) if qtd > 0 else 0.0
     dados_proc_torre.append({
-        'CLIENTE': item['CLIENTE'],
-        'REALIZADAS': item['NO_PRAZO'],
-        'PENDENTES': max(0, item['QTD'] - item['NO_PRAZO']),
-        '%': perc,
+        "CLIENTE": item.get("CLIENTE", ""),
+        "REALIZADAS": em_doca,
+        "PENDENTES": max(0, qtd - em_doca),
+        "%": perc,
     })
 
-  render_mini_barras(dados_proc_torre, 'torre')
-  st.markdown('</div>', unsafe_allow_html=True)
+  render_mini_barras(dados_proc_torre, "torre")
+  st.markdown("</div>", unsafe_allow_html=True)
 
   # Tabela
   st.markdown('<div class="card-floating">', unsafe_allow_html=True)
 
-  h1, h2, h3, h4, h5, h6, h7 = st.columns(
-      [2.2, 1.0, 1.0, 1.1, 1.1, 1.0, 2.0]
-  )
+  h1, h2, h3, h4, h5, h6, h7 = st.columns([2.2, 1.0, 1.0, 1.1, 1.1, 1.0, 2.0])
   h1.markdown('<div class="th-title">CLIENTE</div>', unsafe_allow_html=True)
   h2.markdown(
       '<div class="th-title" style="text-align:center;">QTD</div>',
@@ -896,22 +909,22 @@ def render_torre_multi():
   )
   h3.markdown(
       '<div class="th-title" style="text-align:center;"><span'
-      ' style="color:#00e676;">●</span> NO PRAZO</div>',
+      ' style="color:#00e676;">●</span> EM DOCA</div>',
       unsafe_allow_html=True,
   )
   h4.markdown(
       '<div class="th-title" style="text-align:center;"><span'
-      ' style="color:#ffeb3b;">●</span> ATRASO ORIGEM</div>',
+      ' style="color:#ffeb3b;">●</span> EM TRANSITO</div>',
       unsafe_allow_html=True,
   )
   h5.markdown(
       '<div class="th-title" style="text-align:center;"><span'
-      ' style="color:#ff9800;">●</span> ATRASO DESTINO</div>',
+      ' style="color:#ff9800;">●</span> CHEGADA NO CLIENTE</div>',
       unsafe_allow_html=True,
   )
   h6.markdown(
       '<div class="th-title" style="text-align:center;"><span'
-      ' style="color:#ff5252;">●</span> NO SHOW</div>',
+      ' style="color:#ff5252;">●</span> FINALIZADO</div>',
       unsafe_allow_html=True,
   )
   h7.markdown('<div class="th-title">%</div>', unsafe_allow_html=True)
@@ -921,84 +934,90 @@ def render_torre_multi():
   )
 
   for idx, item in enumerate(st.session_state.dados_torre):
-    col_cli, col_qtd, col_np, col_ao, col_ad, col_ns, col_perc = st.columns(
-        [2.2, 1.0, 1.0, 1.1, 1.1, 1.0, 2.0]
+    col_cli, col_qtd, col_doca, col_trans, col_cheg, col_fin, col_perc = (
+        st.columns([2.2, 1.0, 1.0, 1.1, 1.1, 1.0, 2.0])
     )
 
-    perc = (item['NO_PRAZO'] / item['QTD'] * 100) if item['QTD'] > 0 else 0.0
+    qtd = item.get("QTD", 0)
+    em_doca = item.get("EM_DOCA", 0)
+    em_transito = item.get("EM_TRANSITO", 0)
+    chegada_cli = item.get("CHEGADA_NO_CLIENTE", 0)
+    finalizado = item.get("FINALIZADO", 0)
+
+    perc = (em_doca / qtd * 100) if qtd > 0 else 0.0
     _, cor_bar, _ = get_status_e_cor(perc)
 
     with col_cli:
       st.markdown(
           "<div style='padding-top:8px; font-weight:700;"
-          f" font-size:13px;'>{item['CLIENTE']}</div>",
+          f" font-size:13px;'>{item.get('CLIENTE', '')}</div>",
           unsafe_allow_html=True,
       )
 
     with col_qtd:
       v = st.number_input(
-          '',
+          "",
           min_value=0,
-          value=item['QTD'],
-          key=f't_qtd_{idx}',
-          label_visibility='collapsed',
+          value=qtd,
+          key=f"t_qtd_{idx}",
+          label_visibility="collapsed",
       )
-      if v != item['QTD']:
-        st.session_state.dados_torre[idx]['QTD'] = v
-        salvar_dados('dados_torre', st.session_state.dados_torre)
+      if v != qtd:
+        st.session_state.dados_torre[idx]["QTD"] = v
+        salvar_dados("dados_torre", st.session_state.dados_torre)
         st.rerun()
 
-    with col_np:
+    with col_doca:
       v = st.number_input(
-          '',
+          "",
           min_value=0,
-          max_value=item['QTD'],
-          value=min(item['NO_PRAZO'], item['QTD']),
-          key=f't_np_{idx}',
-          label_visibility='collapsed',
+          max_value=qtd,
+          value=min(em_doca, qtd),
+          key=f"t_doca_{idx}",
+          label_visibility="collapsed",
       )
-      if v != item['NO_PRAZO']:
-        st.session_state.dados_torre[idx]['NO_PRAZO'] = v
-        salvar_dados('dados_torre', st.session_state.dados_torre)
+      if v != em_doca:
+        st.session_state.dados_torre[idx]["EM_DOCA"] = v
+        salvar_dados("dados_torre", st.session_state.dados_torre)
         st.rerun()
 
-    with col_ao:
+    with col_trans:
       v = st.number_input(
-          '',
+          "",
           min_value=0,
-          value=item['ATR_ORIG'],
-          key=f't_ao_{idx}',
-          label_visibility='collapsed',
+          value=em_transito,
+          key=f"t_trans_{idx}",
+          label_visibility="collapsed",
       )
-      if v != item['ATR_ORIG']:
-        st.session_state.dados_torre[idx]['ATR_ORIG'] = v
-        salvar_dados('dados_torre', st.session_state.dados_torre)
+      if v != em_transito:
+        st.session_state.dados_torre[idx]["EM_TRANSITO"] = v
+        salvar_dados("dados_torre", st.session_state.dados_torre)
         st.rerun()
 
-    with col_ad:
+    with col_cheg:
       v = st.number_input(
-          '',
+          "",
           min_value=0,
-          value=item['ATR_DEST'],
-          key=f't_ad_{idx}',
-          label_visibility='collapsed',
+          value=chegada_cli,
+          key=f"t_cheg_{idx}",
+          label_visibility="collapsed",
       )
-      if v != item['ATR_DEST']:
-        st.session_state.dados_torre[idx]['ATR_DEST'] = v
-        salvar_dados('dados_torre', st.session_state.dados_torre)
+      if v != chegada_cli:
+        st.session_state.dados_torre[idx]["CHEGADA_NO_CLIENTE"] = v
+        salvar_dados("dados_torre", st.session_state.dados_torre)
         st.rerun()
 
-    with col_ns:
+    with col_fin:
       v = st.number_input(
-          '',
+          "",
           min_value=0,
-          value=item['NO_SHOW'],
-          key=f't_ns_{idx}',
-          label_visibility='collapsed',
+          value=finalizado,
+          key=f"t_fin_{idx}",
+          label_visibility="collapsed",
       )
-      if v != item['NO_SHOW']:
-        st.session_state.dados_torre[idx]['NO_SHOW'] = v
-        salvar_dados('dados_torre', st.session_state.dados_torre)
+      if v != finalizado:
+        st.session_state.dados_torre[idx]["FINALIZADO"] = v
+        salvar_dados("dados_torre", st.session_state.dados_torre)
         st.rerun()
 
     with col_perc:
@@ -1018,7 +1037,7 @@ def render_torre_multi():
         "<div style='margin-bottom: 8px;'></div>", unsafe_allow_html=True
     )
 
-  st.markdown('</div>', unsafe_allow_html=True)
+  st.markdown("</div>", unsafe_allow_html=True)
 
 
 # Header Principal
@@ -1037,13 +1056,13 @@ st.markdown(
     unsafe_allow_html=True,
 )
 
-tab1, tab2, tab3 = st.tabs(['CADASTRO', 'GER. RISCO', 'TORRE MULTI'])
+tab1, tab2, tab3 = st.tabs(["CADASTRO", "GER. RISCO", "TORRE MULTI"])
 
 with tab1:
-  render_tab_content('dados_cad', 'cad')
+  render_tab_content("dados_cad", "cad")
 
 with tab2:
-  render_tab_content('dados_risco', 'risco')
+  render_tab_content("dados_risco", "risco")
 
 with tab3:
   render_torre_multi()
