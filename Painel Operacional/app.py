@@ -515,17 +515,22 @@ def render_mini_barras(
   cols = [col1, col2, col3]
   for i, item in enumerate(lista_dados):
     with cols[i % 3]:
+      nome_cliente = str(item.get('CLIENTE', '')).strip()
       real = item.get('REALIZADAS', 0)
       pend = item.get('PENDENTES', 0)
       perc = item.get('%', 0.0)
       _, cor_p, _ = get_status_e_cor(perc)
 
+      # Se o nome for CANCELADO (ou em caixa alta/baixa), força a cor da barra principal para vermelho
+      is_cancelado = nome_cliente.upper() == 'CANCELADO'
+      cor_barra_principal = '#ff5252' if is_cancelado else '#00e676'
+      cor_texto_principal = '#ffffff' if is_cancelado else '#000000'
+
       c_cli, c_bar, c_txt = st.columns([0.22, 0.66, 0.12])
       with c_cli:
         st.markdown(
             f"<div style='font-size:12px; font-weight:700; color:#ffffff;"
-            f" padding-top:5px;"
-            f" white-space:nowrap;'>{item.get('CLIENTE', '')}</div>",
+            f" padding-top:5px; white-space:nowrap;'>{nome_cliente}</div>",
             unsafe_allow_html=True,
         )
       with c_bar:
@@ -539,8 +544,10 @@ def render_mini_barras(
                 text=[f'{real}'],
                 textposition='inside',
                 insidetextanchor='middle',
-                textfont=dict(color='#000000', size=11, family='sans-serif'),
-                marker=dict(color='#00e676', cornerradius=10),
+                textfont=dict(
+                    color=cor_texto_principal, size=11, family='sans-serif'
+                ),
+                marker=dict(color=cor_barra_principal, cornerradius=10),
             )
         )
         fig.add_trace(
@@ -574,9 +581,9 @@ def render_mini_barras(
         )
       with c_txt:
         st.markdown(
-            f"<div style='font-size:12px; font-weight:800; color:{cor_p};"
-            f" text-align:left; padding-left:2px;"
-            f" padding-top:5px;'>{perc:.0f}%</div>",
+            f"<div style='font-size:12px; font-weight:800;"
+            f" color:{'#ff5252' if is_cancelado else cor_p}; text-align:left;"
+            f" padding-left:2px; padding-top:5px;'>{perc:.0f}%</div>",
             unsafe_allow_html=True,
         )
 
@@ -771,6 +778,10 @@ def render_tab_content(
       )
 
     with col_perc:
+      # Caso seja CANCELADO na tabela inferior, força a cor de progresso para vermelho também
+      if str(r['CLIENTE']).strip().upper() == 'CANCELADO':
+        cor_bar = '#ff5252'
+
       st.markdown(
           f"""
                 <div style="padding-top:8px; display:flex; align-items:center; gap:12px;">
@@ -784,11 +795,18 @@ def render_tab_content(
       )
 
     with col_stat:
-      st.markdown(
-          "<div style='padding-top:4px; text-align:center;'><span"
-          f" class='{badge_class}'>● {status_txt}</span></div>",
-          unsafe_allow_html=True,
-      )
+      if str(r['CLIENTE']).strip().upper() == 'CANCELADO':
+        st.markdown(
+            "<div style='padding-top:4px; text-align:center;'><span"
+            " class='badge-baixo'>● CANCELADO</span></div>",
+            unsafe_allow_html=True,
+        )
+      else:
+        st.markdown(
+            "<div style='padding-top:4px; text-align:center;'><span"
+            f" class='{badge_class}'>● {status_txt}</span></div>",
+            unsafe_allow_html=True,
+        )
 
     st.markdown(
         "<div style='margin-bottom: 8px;'></div>", unsafe_allow_html=True
