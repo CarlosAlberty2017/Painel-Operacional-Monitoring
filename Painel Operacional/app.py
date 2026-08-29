@@ -460,7 +460,13 @@ def render_mini_barras(lista_dados, prefix_key):
             real = item['REALIZADAS']
             pend = item['PENDENTES']
             perc = item['%']
+
+            # CANCELADO deve permanecer sempre em vermelho no gráfico,
+            # independentemente do percentual de realização.
+            is_cancelado = str(item.get('CLIENTE', '')).strip().upper() == 'CANCELADO'
             _, cor_p, _ = get_status_e_cor(perc)
+            if is_cancelado:
+                cor_p = '#ff5252'
 
             c_cli, c_bar, c_txt = st.columns([0.20, 0.65, 0.15])
             with c_cli:
@@ -480,8 +486,15 @@ def render_mini_barras(lista_dados, prefix_key):
                         text=[f'{real}'],
                         textposition='inside',
                         insidetextanchor='middle',
-                        textfont=dict(color='#000000', size=11, family='sans-serif'),
-                        marker=dict(color='#00e676', cornerradius=10),
+                        textfont=dict(
+                            color='#ffffff' if is_cancelado else '#000000',
+                            size=11,
+                            family='sans-serif'
+                        ),
+                        marker=dict(
+                            color='#ff5252' if is_cancelado else '#00e676',
+                            cornerradius=10
+                        ),
                     )
                 )
                 fig.add_trace(
