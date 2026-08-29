@@ -462,7 +462,7 @@ def render_mini_barras(lista_dados, prefix_key):
             perc = item['%']
             _, cor_p, _ = get_status_e_cor(perc)
 
-            c_cli, c_bar, c_txt = st.columns([0.20, 0.72, 0.08])
+            c_cli, c_bar, c_txt = st.columns([0.20, 0.65, 0.15])
             with c_cli:
                 st.markdown(
                     f"<div style='font-size:12px; font-weight:700; color:#ffffff;"
