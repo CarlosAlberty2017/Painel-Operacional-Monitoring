@@ -64,94 +64,95 @@ risco_padrao = [
     {'CLIENTE': 'Monitoring', 'QTD': 100, 'REALIZADAS': 92},
 ]
 
+# Novas chaves para a Torre Multi: EM_DOCA, EM_TRANSITO, CHEGADA_DESTINO, FINALIZADO
 torre_padrao = [
     {
         'CLIENTE': 'Amazon',
         'QTD': 42,
-        'NO_PRAZO': 40,
-        'ATR_ORIG': 1,
-        'ATR_DEST': 1,
-        'NO_SHOW': 0,
+        'EM_DOCA': 10,
+        'EM_TRANSITO': 15,
+        'CHEGADA_DESTINO': 10,
+        'FINALIZADO': 7,
     },
     {
         'CLIENTE': 'Imile',
         'QTD': 28,
-        'NO_PRAZO': 25,
-        'ATR_ORIG': 2,
-        'ATR_DEST': 1,
-        'NO_SHOW': 0,
+        'EM_DOCA': 5,
+        'EM_TRANSITO': 10,
+        'CHEGADA_DESTINO': 8,
+        'FINALIZADO': 5,
     },
     {
         'CLIENTE': 'Decathlon',
         'QTD': 18,
-        'NO_PRAZO': 18,
-        'ATR_ORIG': 0,
-        'ATR_DEST': 0,
-        'NO_SHOW': 0,
+        'EM_DOCA': 2,
+        'EM_TRANSITO': 6,
+        'CHEGADA_DESTINO': 5,
+        'FINALIZADO': 5,
     },
     {
         'CLIENTE': 'Loggi',
         'QTD': 35,
-        'NO_PRAZO': 31,
-        'ATR_ORIG': 2,
-        'ATR_DEST': 2,
-        'NO_SHOW': 0,
+        'EM_DOCA': 8,
+        'EM_TRANSITO': 12,
+        'CHEGADA_DESTINO': 10,
+        'FINALIZADO': 5,
     },
     {
         'CLIENTE': 'Plural',
         'QTD': 12,
-        'NO_PRAZO': 11,
-        'ATR_ORIG': 0,
-        'ATR_DEST': 1,
-        'NO_SHOW': 0,
+        'EM_DOCA': 3,
+        'EM_TRANSITO': 4,
+        'CHEGADA_DESTINO': 3,
+        'FINALIZADO': 2,
     },
     {
         'CLIENTE': 'Brasil Gráfica',
         'QTD': 9,
-        'NO_PRAZO': 8,
-        'ATR_ORIG': 0,
-        'ATR_DEST': 1,
-        'NO_SHOW': 0,
+        'EM_DOCA': 1,
+        'EM_TRANSITO': 4,
+        'CHEGADA_DESTINO': 2,
+        'FINALIZADO': 2,
     },
     {
         'CLIENTE': 'Total Meli',
         'QTD': 54,
-        'NO_PRAZO': 48,
-        'ATR_ORIG': 3,
-        'ATR_DEST': 2,
-        'NO_SHOW': 1,
+        'EM_DOCA': 12,
+        'EM_TRANSITO': 20,
+        'CHEGADA_DESTINO': 12,
+        'FINALIZADO': 10,
     },
     {
         'CLIENTE': 'Carrossel J&T',
         'QTD': 22,
-        'NO_PRAZO': 20,
-        'ATR_ORIG': 1,
-        'ATR_DEST': 0,
-        'NO_SHOW': 1,
+        'EM_DOCA': 4,
+        'EM_TRANSITO': 8,
+        'CHEGADA_DESTINO': 6,
+        'FINALIZADO': 4,
     },
     {
         'CLIENTE': 'ANJUN',
         'QTD': 15,
-        'NO_PRAZO': 13,
-        'ATR_ORIG': 1,
-        'ATR_DEST': 1,
-        'NO_SHOW': 0,
+        'EM_DOCA': 3,
+        'EM_TRANSITO': 5,
+        'CHEGADA_DESTINO': 4,
+        'FINALIZADO': 3,
     },
     {
         'CLIENTE': 'Americanas',
         'QTD': 31,
-        'NO_PRAZO': 27,
-        'ATR_ORIG': 2,
-        'ATR_DEST': 1,
-        'NO_SHOW': 1,
+        'EM_DOCA': 6,
+        'EM_TRANSITO': 10,
+        'CHEGADA_DESTINO': 10,
+        'FINALIZADO': 5,
     },
     {
         'CLIENTE': 'Word Post',
         'QTD': 11,
-        'NO_PRAZO': 10,
-        'ATR_ORIG': 0,
-        'ATR_DEST': 0,
-        'NO_SHOW': 1,
+        'EM_DOCA': 2,
+        'EM_TRANSITO': 4,
+        'CHEGADA_DESTINO': 3,
+        'FINALIZADO': 2,
     },
 ]
 
@@ -265,6 +266,7 @@ st.markdown(
     .kpi-value-green { font-size: 32px; font-weight: 800; color: #00e676; margin-top: 6px; }
     .kpi-value-yellow { font-size: 32px; font-weight: 800; color: #ffeb3b; margin-top: 6px; }
     .kpi-value-orange { font-size: 32px; font-weight: 800; color: #ff9800; margin-top: 6px; }
+    .kpi-value-blue { font-size: 32px; font-weight: 800; color: #29b6f6; margin-top: 6px; }
     .kpi-value-red { font-size: 32px; font-weight: 800; color: #ff5252; margin-top: 6px; }
 
     .kpi-bar-white { position: absolute; bottom: 0; left: 0; right: 0; height: 3px; background-color: #ffffff; }
@@ -436,28 +438,15 @@ def render_barra_empilhada(v1, v2, chart_key, cor_secundaria='#ff5252'):
   )
 
 
-def render_barra_empilhada_torre(v_np, v_ao, v_ad, v_ns, chart_key):
+def render_barra_empilhada_torre(v_doca, v_trans, v_cheg, v_fin, chart_key):
   fig = go.Figure()
   fig.add_trace(
       go.Bar(
           y=['GERAL'],
-          x=[v_np],
+          x=[v_doca],
           orientation='h',
           width=0.7,
-          text=[f'{v_np}' if v_np > 0 else ''],
-          textposition='inside',
-          insidetextanchor='middle',
-          textfont=dict(color='#000000', size=14, family='sans-serif'),
-          marker=dict(color='#00e676', cornerradius=10),
-      )
-  )
-  fig.add_trace(
-      go.Bar(
-          y=['GERAL'],
-          x=[v_ao],
-          orientation='h',
-          width=0.7,
-          text=[f'{v_ao}' if v_ao > 0 else ''],
+          text=[f'{v_doca}' if v_doca > 0 else ''],
           textposition='inside',
           insidetextanchor='middle',
           textfont=dict(color='#000000', size=14, family='sans-serif'),
@@ -467,10 +456,23 @@ def render_barra_empilhada_torre(v_np, v_ao, v_ad, v_ns, chart_key):
   fig.add_trace(
       go.Bar(
           y=['GERAL'],
-          x=[v_ad],
+          x=[v_trans],
           orientation='h',
           width=0.7,
-          text=[f'{v_ad}' if v_ad > 0 else ''],
+          text=[f'{v_trans}' if v_trans > 0 else ''],
+          textposition='inside',
+          insidetextanchor='middle',
+          textfont=dict(color='#ffffff', size=14, family='sans-serif'),
+          marker=dict(color='#29b6f6', cornerradius=10),
+      )
+  )
+  fig.add_trace(
+      go.Bar(
+          y=['GERAL'],
+          x=[v_cheg],
+          orientation='h',
+          width=0.7,
+          text=[f'{v_cheg}' if v_cheg > 0 else ''],
           textposition='inside',
           insidetextanchor='middle',
           textfont=dict(color='#ffffff', size=14, family='sans-serif'),
@@ -480,14 +482,14 @@ def render_barra_empilhada_torre(v_np, v_ao, v_ad, v_ns, chart_key):
   fig.add_trace(
       go.Bar(
           y=['GERAL'],
-          x=[v_ns],
+          x=[v_fin],
           orientation='h',
           width=0.7,
-          text=[f'{v_ns}' if v_ns > 0 else ''],
+          text=[f'{v_fin}' if v_fin > 0 else ''],
           textposition='inside',
           insidetextanchor='middle',
-          textfont=dict(color='#ffffff', size=14, family='sans-serif'),
-          marker=dict(color='#ff5252', cornerradius=10),
+          textfont=dict(color='#000000', size=14, family='sans-serif'),
+          marker=dict(color='#00e676', cornerradius=10),
       )
   )
   fig.update_layout(
@@ -521,7 +523,6 @@ def render_mini_barras(
       perc = item.get('%', 0.0)
       _, cor_p, _ = get_status_e_cor(perc)
 
-      # Se o nome for CANCELADO (ou em caixa alta/baixa), força a cor da barra principal para vermelho
       is_cancelado = nome_cliente.upper() == 'CANCELADO'
       cor_barra_principal = '#ff5252' if is_cancelado else '#00e676'
       cor_texto_principal = '#ffffff' if is_cancelado else '#000000'
@@ -778,7 +779,6 @@ def render_tab_content(
       )
 
     with col_perc:
-      # Caso seja CANCELADO na tabela inferior, força a cor de progresso para vermelho também
       if str(r['CLIENTE']).strip().upper() == 'CANCELADO':
         cor_bar = '#ff5252'
 
@@ -821,28 +821,28 @@ def render_torre_multi():
       for item in st.session_state.dados_torre
       if isinstance(item, dict)
   )
-  tot_no_prazo = sum(
-      item.get('NO_PRAZO', 0)
+  tot_em_doca = sum(
+      item.get('EM_DOCA', 0)
       for item in st.session_state.dados_torre
       if isinstance(item, dict)
   )
-  tot_atr_orig = sum(
-      item.get('ATR_ORIG', 0)
+  tot_em_transito = sum(
+      item.get('EM_TRANSITO', 0)
       for item in st.session_state.dados_torre
       if isinstance(item, dict)
   )
-  tot_atr_dest = sum(
-      item.get('ATR_DEST', 0)
+  tot_chegada_dest = sum(
+      item.get('CHEGADA_DESTINO', 0)
       for item in st.session_state.dados_torre
       if isinstance(item, dict)
   )
-  tot_no_show = sum(
-      item.get('NO_SHOW', 0)
+  tot_finalizado = sum(
+      item.get('FINALIZADO', 0)
       for item in st.session_state.dados_torre
       if isinstance(item, dict)
   )
 
-  perf_geral = (tot_no_prazo / tot_qtd * 100) if tot_qtd > 0 else 0.0
+  perf_geral = (tot_finalizado / tot_qtd * 100) if tot_qtd > 0 else 0.0
 
   c1, c2, c3, c4, c5, c6 = st.columns(6)
   c1.markdown(
@@ -859,8 +859,8 @@ def render_torre_multi():
   c2.markdown(
       f"""
         <div class="kpi-card">
-            <div class="kpi-title">NO PRAZO</div>
-            <div class="kpi-value-green">{tot_no_prazo}</div>
+            <div class="kpi-title">EM DOCA</div>
+            <div class="kpi-value-yellow">{tot_em_doca}</div>
         </div>
     """,
       unsafe_allow_html=True,
@@ -869,8 +869,8 @@ def render_torre_multi():
   c3.markdown(
       f"""
         <div class="kpi-card">
-            <div class="kpi-title">ATR ORIG</div>
-            <div class="kpi-value-yellow">{tot_atr_orig}</div>
+            <div class="kpi-title">EM TRANSITO</div>
+            <div class="kpi-value-blue">{tot_em_transito}</div>
         </div>
     """,
       unsafe_allow_html=True,
@@ -879,8 +879,8 @@ def render_torre_multi():
   c4.markdown(
       f"""
         <div class="kpi-card">
-            <div class="kpi-title">ATR DEST</div>
-            <div class="kpi-value-orange">{tot_atr_dest}</div>
+            <div class="kpi-title">CHEGADA DESTINO</div>
+            <div class="kpi-value-orange">{tot_chegada_dest}</div>
         </div>
     """,
       unsafe_allow_html=True,
@@ -889,8 +889,8 @@ def render_torre_multi():
   c5.markdown(
       f"""
         <div class="kpi-card">
-            <div class="kpi-title">NO SHOW</div>
-            <div class="kpi-value-red">{tot_no_show}</div>
+            <div class="kpi-title">FINALIZADO</div>
+            <div class="kpi-value-green">{tot_finalizado}</div>
         </div>
     """,
       unsafe_allow_html=True,
@@ -917,10 +917,10 @@ def render_torre_multi():
             <div class="charts-header">
                 <div class="charts-title">DISTRIBUIÇÃO DE OCORRÊNCIAS POR STATUS</div>
                 <div class="charts-legend">
-                    <span style="color:#00e676;">● NO PRAZO</span>
-                    <span style="color:#ffeb3b;">● ATRASO ORIGEM</span>
-                    <span style="color:#ff9800;">● ATRASO DESTINO</span>
-                    <span style="color:#ff5252;">● NO SHOW</span>
+                    <span style="color:#ffeb3b;">● EM DOCA</span>
+                    <span style="color:#29b6f6;">● EM TRANSITO</span>
+                    <span style="color:#ff9800;">● CHEGADA DESTINO</span>
+                    <span style="color:#00e676;">● FINALIZADO</span>
                 </div>
             </div>
     """,
@@ -928,7 +928,11 @@ def render_torre_multi():
   )
 
   render_barra_empilhada_torre(
-      tot_no_prazo, tot_atr_orig, tot_atr_dest, tot_no_show, 'stack_bar_torre'
+      tot_em_doca,
+      tot_em_transito,
+      tot_chegada_dest,
+      tot_finalizado,
+      'stack_bar_torre',
   )
   st.markdown(
       "<div style='margin-bottom: 20px;'></div>", unsafe_allow_html=True
@@ -939,12 +943,12 @@ def render_torre_multi():
     if not isinstance(item, dict):
       continue
     qtd = item.get('QTD', 0)
-    np = item.get('NO_PRAZO', 0)
-    perc = (np / qtd * 100) if qtd > 0 else 0.0
+    fin = item.get('FINALIZADO', 0)
+    perc = (fin / qtd * 100) if qtd > 0 else 0.0
     dados_proc_torre.append({
         'CLIENTE': item.get('CLIENTE', ''),
-        'REALIZADAS': np,
-        'PENDENTES': max(0, qtd - np),
+        'REALIZADAS': fin,
+        'PENDENTES': max(0, qtd - fin),
         '%': perc,
     })
 
@@ -954,7 +958,7 @@ def render_torre_multi():
   st.markdown('<div class="card-floating">', unsafe_allow_html=True)
 
   h1, h2, h3, h4, h5, h6, h7 = st.columns(
-      [2.2, 1.0, 1.0, 1.1, 1.1, 1.0, 2.0]
+      [2.2, 1.0, 1.1, 1.1, 1.2, 1.0, 2.0]
   )
   h1.markdown('<div class="th-title">CLIENTE</div>', unsafe_allow_html=True)
   h2.markdown(
@@ -963,22 +967,22 @@ def render_torre_multi():
   )
   h3.markdown(
       '<div class="th-title" style="text-align:center;"><span'
-      ' style="color:#00e676;">●</span> NO PRAZO</div>',
+      ' style="color:#ffeb3b;">●</span> EM DOCA</div>',
       unsafe_allow_html=True,
   )
   h4.markdown(
       '<div class="th-title" style="text-align:center;"><span'
-      ' style="color:#ffeb3b;">●</span> ATRASO ORIGEM</div>',
+      ' style="color:#29b6f6;">●</span> EM TRANSITO</div>',
       unsafe_allow_html=True,
   )
   h5.markdown(
       '<div class="th-title" style="text-align:center;"><span'
-      ' style="color:#ff9800;">●</span> ATRASO DESTINO</div>',
+      ' style="color:#ff9800;">●</span> CHEGADA DESTINO</div>',
       unsafe_allow_html=True,
   )
   h6.markdown(
       '<div class="th-title" style="text-align:center;"><span'
-      ' style="color:#ff5252;">●</span> NO SHOW</div>',
+      ' style="color:#00e676;">●</span> FINALIZADO</div>',
       unsafe_allow_html=True,
   )
   h7.markdown('<div class="th-title">%</div>', unsafe_allow_html=True)
@@ -991,17 +995,17 @@ def render_torre_multi():
     if not isinstance(item, dict):
       continue
 
-    col_cli, col_qtd, col_np, col_ao, col_ad, col_ns, col_perc = st.columns(
-        [2.2, 1.0, 1.0, 1.1, 1.1, 1.0, 2.0]
+    col_cli, col_qtd, col_doca, col_trans, col_cheg, col_fin, col_perc = (
+        st.columns([2.2, 1.0, 1.1, 1.1, 1.2, 1.0, 2.0])
     )
 
     qtd = item.get('QTD', 0)
-    np = item.get('NO_PRAZO', 0)
-    ao = item.get('ATR_ORIG', 0)
-    ad = item.get('ATR_DEST', 0)
-    ns = item.get('NO_SHOW', 0)
+    doca = item.get('EM_DOCA', 0)
+    trans = item.get('EM_TRANSITO', 0)
+    cheg = item.get('CHEGADA_DESTINO', 0)
+    fin = item.get('FINALIZADO', 0)
 
-    perc = (np / qtd * 100) if qtd > 0 else 0.0
+    perc = (fin / qtd * 100) if qtd > 0 else 0.0
     _, cor_bar, _ = get_status_e_cor(perc)
 
     with col_cli:
@@ -1024,56 +1028,55 @@ def render_torre_multi():
         salvar_dados('dados_torre', st.session_state.dados_torre)
         st.rerun()
 
-    with col_np:
+    with col_doca:
       v = st.number_input(
           '',
           min_value=0,
-          max_value=qtd,
-          value=min(np, qtd),
-          key=f't_np_{idx}',
+          value=doca,
+          key=f't_doca_{idx}',
           label_visibility='collapsed',
       )
-      if v != np:
-        st.session_state.dados_torre[idx]['NO_PRAZO'] = v
+      if v != doca:
+        st.session_state.dados_torre[idx]['EM_DOCA'] = v
         salvar_dados('dados_torre', st.session_state.dados_torre)
         st.rerun()
 
-    with col_ao:
+    with col_trans:
       v = st.number_input(
           '',
           min_value=0,
-          value=ao,
-          key=f't_ao_{idx}',
+          value=trans,
+          key=f't_trans_{idx}',
           label_visibility='collapsed',
       )
-      if v != ao:
-        st.session_state.dados_torre[idx]['ATR_ORIG'] = v
+      if v != trans:
+        st.session_state.dados_torre[idx]['EM_TRANSITO'] = v
         salvar_dados('dados_torre', st.session_state.dados_torre)
         st.rerun()
 
-    with col_ad:
+    with col_cheg:
       v = st.number_input(
           '',
           min_value=0,
-          value=ad,
-          key=f't_ad_{idx}',
+          value=cheg,
+          key=f't_cheg_{idx}',
           label_visibility='collapsed',
       )
-      if v != ad:
-        st.session_state.dados_torre[idx]['ATR_DEST'] = v
+      if v != cheg:
+        st.session_state.dados_torre[idx]['CHEGADA_DESTINO'] = v
         salvar_dados('dados_torre', st.session_state.dados_torre)
         st.rerun()
 
-    with col_ns:
+    with col_fin:
       v = st.number_input(
           '',
           min_value=0,
-          value=ns,
-          key=f't_ns_{idx}',
+          value=fin,
+          key=f't_fin_{idx}',
           label_visibility='collapsed',
       )
-      if v != ns:
-        st.session_state.dados_torre[idx]['NO_SHOW'] = v
+      if v != fin:
+        st.session_state.dados_torre[idx]['FINALIZADO'] = v
         salvar_dados('dados_torre', st.session_state.dados_torre)
         st.rerun()
 
