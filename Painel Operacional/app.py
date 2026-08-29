@@ -63,7 +63,6 @@ if 'dados_risco' not in st.session_state:
         ],
     )
 
-    # Garante estrutura com CANCELADO e a chave CHECKLIST
     clientes_existentes = [x['CLIENTE'] for x in dados_risco_carregados]
     for item in dados_risco_carregados:
         if 'CHECKLIST' not in item:
@@ -76,42 +75,6 @@ if 'dados_risco' not in st.session_state:
         salvar_dados('dados_risco', dados_risco_carregados)
 
     st.session_state.dados_risco = dados_risco_carregados
-
-if 'dados_torre' not in st.session_state:
-    st.session_state.dados_torre = dados_firebase.get(
-        'dados_torre',
-        [
-            {'CLIENTE': 'Amazon', 'QTD': 42, 'EM_DOCA': 40, 'EM_TRANSITO': 1, 'CHEGADA_NO_CLIENTE': 1, 'FINALIZADO': 0},
-            {'CLIENTE': 'Imile', 'QTD': 28, 'EM_DOCA': 25, 'EM_TRANSITO': 2, 'CHEGADA_NO_CLIENTE': 1, 'FINALIZADO': 0},
-            {'CLIENTE': 'Decathlon', 'QTD': 18, 'EM_DOCA': 18, 'EM_TRANSITO': 0, 'CHEGADA_NO_CLIENTE': 0, 'FINALIZADO': 0},
-            {'CLIENTE': 'Loggi', 'QTD': 35, 'EM_DOCA': 31, 'EM_TRANSITO': 2, 'CHEGADA_NO_CLIENTE': 2, 'FINALIZADO': 0},
-            {'CLIENTE': 'Plural', 'QTD': 12, 'EM_DOCA': 11, 'EM_TRANSITO': 0, 'CHEGADA_NO_CLIENTE': 1, 'FINALIZADO': 0},
-            {'CLIENTE': 'Brasil Gráfica', 'QTD': 9, 'EM_DOCA': 8, 'EM_TRANSITO': 0, 'CHEGADA_NO_CLIENTE': 1, 'FINALIZADO': 0},
-            {'CLIENTE': 'Total Meli', 'QTD': 54, 'EM_DOCA': 48, 'EM_TRANSITO': 3, 'CHEGADA_NO_CLIENTE': 2, 'FINALIZADO': 1},
-            {'CLIENTE': 'Carrossel J&T', 'QTD': 22, 'EM_DOCA': 20, 'EM_TRANSITO': 1, 'CHEGADA_NO_CLIENTE': 0, 'FINALIZADO': 1},
-            {'CLIENTE': 'ANJUN', 'QTD': 15, 'EM_DOCA': 13, 'EM_TRANSITO': 1, 'CHEGADA_NO_CLIENTE': 1, 'FINALIZADO': 0},
-            {'CLIENTE': 'Americanas', 'QTD': 31, 'EM_DOCA': 27, 'EM_TRANSITO': 2, 'CHEGADA_NO_CLIENTE': 1, 'FINALIZADO': 1},
-            {'CLIENTE': 'Word Post', 'QTD': 11, 'EM_DOCA': 10, 'EM_TRANSITO': 0, 'CHEGADA_NO_CLIENTE': 0, 'FINALIZADO': 1},
-        ],
-    )
-
-if 'dados_torre_gerencial' not in st.session_state:
-    st.session_state.dados_torre_gerencial = dados_firebase.get(
-        'dados_torre_gerencial',
-        [
-            {'CLIENTE': 'Amazon', 'QTD': 42, 'NO_PRAZO': 40, 'ATR_ORIG': 1, 'ATR_DEST': 1, 'NO_SHOW': 0},
-            {'CLIENTE': 'Imile', 'QTD': 28, 'NO_PRAZO': 25, 'ATR_ORIG': 2, 'ATR_DEST': 1, 'NO_SHOW': 0},
-            {'CLIENTE': 'Decathlon', 'QTD': 18, 'NO_PRAZO': 18, 'ATR_ORIG': 0, 'ATR_DEST': 0, 'NO_SHOW': 0},
-            {'CLIENTE': 'Loggi', 'QTD': 35, 'NO_PRAZO': 31, 'ATR_ORIG': 2, 'ATR_DEST': 2, 'NO_SHOW': 0},
-            {'CLIENTE': 'Plural', 'QTD': 12, 'NO_PRAZO': 11, 'ATR_ORIG': 0, 'ATR_DEST': 1, 'NO_SHOW': 0},
-            {'CLIENTE': 'Brasil Gráfica', 'QTD': 9, 'NO_PRAZO': 8, 'ATR_ORIG': 0, 'ATR_DEST': 1, 'NO_SHOW': 0},
-            {'CLIENTE': 'Total Meli', 'QTD': 54, 'NO_PRAZO': 48, 'ATR_ORIG': 3, 'ATR_DEST': 2, 'NO_SHOW': 1},
-            {'CLIENTE': 'Carrossel J&T', 'QTD': 22, 'NO_PRAZO': 20, 'ATR_ORIG': 1, 'ATR_DEST': 0, 'NO_SHOW': 1},
-            {'CLIENTE': 'ANJUN', 'QTD': 15, 'NO_PRAZO': 13, 'ATR_ORIG': 1, 'ATR_DEST': 1, 'NO_SHOW': 0},
-            {'CLIENTE': 'Americanas', 'QTD': 31, 'NO_PRAZO': 27, 'ATR_ORIG': 2, 'ATR_DEST': 1, 'NO_SHOW': 1},
-            {'CLIENTE': 'Word Post', 'QTD': 11, 'NO_PRAZO': 10, 'ATR_ORIG': 0, 'ATR_DEST': 0, 'NO_SHOW': 1},
-        ],
-    )
 
 # Estilização CSS Personalizada
 st.markdown(
@@ -235,6 +198,20 @@ st.markdown(
         font-size: 13px;
     }
 
+    /* Estilos das Barras de Progresso Tabela */
+    .progress-bar-bg {
+        background-color: #1c222e;
+        border-radius: 10px;
+        height: 8px;
+        width: 100%;
+        overflow: hidden;
+    }
+    .progress-bar-fill {
+        height: 100%;
+        border-radius: 10px;
+        transition: width 0.3s ease;
+    }
+
     .badge-otimo {
         background-color: rgba(0, 230, 118, 0.08);
         color: #00e676;
@@ -351,7 +328,6 @@ def render_mini_barras(lista_dados, prefix_key):
                 fig = go.Figure()
                 
                 if is_cancelado:
-                    # Para CANCELADO, mostra apenas barra vermelha
                     qtd_cancel = item['QTD']
                     fig.add_trace(
                         go.Bar(
@@ -419,17 +395,12 @@ def render_mini_barras(lista_dados, prefix_key):
                 )
 
 
-# Renderização customizada para a aba Gerenciamento de Risco
 def render_tab_risco():
     raw_dados = st.session_state.dados_risco
     
-    qtd_cancelados = 0
-    for item in raw_dados:
-        if item['CLIENTE'] == 'CANCELADO':
-            qtd_cancelados = item['QTD']
-
-    tot_qtd_bruta = sum([item['QTD'] for item in raw_dados if item['CLIENTE'] != 'CANCELADO'])
-    tot_qtd = tot_qtd_bruta  # Quantidade total já com o desconto dos cancelados
+    qtd_cancelados = sum([item['QTD'] for item in raw_dados if item['CLIENTE'] == 'CANCELADO'])
+    tot_qtd_bruta = sum([item['QTD'] for item in raw_dados])
+    tot_qtd = tot_qtd_bruta - qtd_cancelados
     
     tot_real = sum([item['REALIZADAS'] for item in raw_dados if item['CLIENTE'] != 'CANCELADO'])
     
@@ -528,7 +499,7 @@ def render_tab_risco():
     render_mini_barras(dados_processados, 'risco')
     st.markdown('</div>', unsafe_allow_html=True)
 
-    # Tabela com a nova coluna CHECK LIST
+    # Tabela com a coluna CHECK LIST
     st.markdown('<div class="card-floating">', unsafe_allow_html=True)
 
     h1, h2, h3, h4, h5, h6, h7 = st.columns([2.0, 1.0, 1.0, 1.0, 1.0, 2.0, 1.2])
@@ -643,7 +614,6 @@ def render_tab_risco():
     st.markdown('</div>', unsafe_allow_html=True)
 
 
-# Renderização genérica para CADASTRO
 def render_tab_content(state_key, prefix_key):
     tot_qtd, tot_real = 0, 0
     dados_processados = []
@@ -799,6 +769,38 @@ def render_tab_content(state_key, prefix_key):
                 unsafe_allow_html=True,
             )
 
+        with col_perc:
+            st.markdown(
+                f"""
+                <div style="display:flex; align-items:center; gap:8px; padding-top:10px;">
+                    <div class="progress-bar-bg">
+                        <div class="progress-bar-fill" style="width:{r['%']}%; background-color:{cor_bar};"></div>
+                    </div>
+                    <span style="font-size:12px; font-weight:700;">{r['%']:.0f}%</span>
+                </div>
+                """,
+                unsafe_allow_html=True,
+            )
+
+        with col_stat:
+            st.markdown(
+                f"<div style='text-align:center; padding-top:4px;'><span class='{badge_class}'>{status_txt}</span></div>",
+                unsafe_allow_html=True,
+            )
+
+    st.markdown('</div>', unsafe_allow_html=True)
+
+
+# Renderização Principal do Streamlit
+tab_cad, tab_risco = st.tabs(
+    ["CADASTRO", "GERENCIAMENTO DE RISCO"]
+)
+
+with tab_cad:
+    render_tab_content('dados_cad', 'cad')
+
+with tab_risco:
+    render_tab_risco()
         with col_perc:
             st.markdown(
                 f"""
