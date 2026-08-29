@@ -437,10 +437,9 @@ def render_barra_empilhada(v1, v2, chart_key, cor_secundaria='#ff5252'):
       key=chart_key,
   )
 
+
 def render_barra_empilhada_torre(v_doca, v_trans, v_cheg, v_fin, chart_key):
   fig = go.Figure()
-
-  # EM DOCA (Amarelo)
   fig.add_trace(
       go.Bar(
           y=['GERAL'],
@@ -450,12 +449,10 @@ def render_barra_empilhada_torre(v_doca, v_trans, v_cheg, v_fin, chart_key):
           text=[f'{v_doca}' if v_doca > 0 else ''],
           textposition='inside',
           insidetextanchor='middle',
-          textfont=dict(color='#ffffff', size=14, family='sans-serif'),
-          marker=dict(color='#FFD028', cornerradius=10),
+          textfont=dict(color='#000000', size=14, family='sans-serif'),
+          marker=dict(color='#ffeb3b', cornerradius=10),
       )
   )
-
-  # EM TRANSITO (Laranja)
   fig.add_trace(
       go.Bar(
           y=['GERAL'],
@@ -466,11 +463,9 @@ def render_barra_empilhada_torre(v_doca, v_trans, v_cheg, v_fin, chart_key):
           textposition='inside',
           insidetextanchor='middle',
           textfont=dict(color='#ffffff', size=14, family='sans-serif'),
-          marker=dict(color='#FF9248', cornerradius=10),
+          marker=dict(color='#29b6f6', cornerradius=10),
       )
   )
-
-  # CHEGADA DESTINO (Vermelho/Coral)
   fig.add_trace(
       go.Bar(
           y=['GERAL'],
@@ -481,11 +476,9 @@ def render_barra_empilhada_torre(v_doca, v_trans, v_cheg, v_fin, chart_key):
           textposition='inside',
           insidetextanchor='middle',
           textfont=dict(color='#ffffff', size=14, family='sans-serif'),
-          marker=dict(color='#FF4D4D', cornerradius=10),
+          marker=dict(color='#ff9800', cornerradius=10),
       )
   )
-
-  # FINALIZADO (Verde)
   fig.add_trace(
       go.Bar(
           y=['GERAL'],
@@ -495,9 +488,25 @@ def render_barra_empilhada_torre(v_doca, v_trans, v_cheg, v_fin, chart_key):
           text=[f'{v_fin}' if v_fin > 0 else ''],
           textposition='inside',
           insidetextanchor='middle',
-          textfont=dict(color='#ffffff', size=14, family='sans-serif'),
-          marker=dict(color='#00D26A', cornerradius=10),
+          textfont=dict(color='#000000', size=14, family='sans-serif'),
+          marker=dict(color='#00e676', cornerradius=10),
       )
+  )
+  fig.update_layout(
+      barmode='stack',
+      height=45,
+      margin=dict(l=0, r=0, t=0, b=0),
+      paper_bgcolor='rgba(0,0,0,0)',
+      plot_bgcolor='rgba(0,0,0,0)',
+      showlegend=False,
+      xaxis=dict(showgrid=False, visible=False),
+      yaxis=dict(showgrid=False, visible=False),
+  )
+  st.plotly_chart(
+      fig,
+      use_container_width=True,
+      config={'displayModeBar': False},
+      key=chart_key,
   )
 
 
