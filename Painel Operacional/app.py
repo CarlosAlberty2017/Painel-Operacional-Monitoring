@@ -177,8 +177,9 @@ st.markdown(
     .block-container {
         padding-top: 1rem !important;
         padding-bottom: 0rem !important;
-        padding-left: 2rem !important;
-        padding-right: 2rem !important;
+        padding-left: 1rem !important;
+        padding-right: 1rem !important;
+        max-width: 100% !important;
     }
     
     header[data-testid="stHeader"] {
@@ -276,6 +277,7 @@ st.markdown(
         border-radius: 14px;
         padding: 20px 24px;
         margin-bottom: 20px;
+        width: 100%;
     }
     .charts-header {
         display: flex;
@@ -302,6 +304,7 @@ st.markdown(
         border: 1px solid #1c222e;
         border-radius: 14px;
         padding: 20px 24px;
+        width: 100%;
     }
 
     .th-title {
@@ -387,18 +390,18 @@ def get_status_e_cor(perc):
     return 'ÓTIMO', '#00e676', 'badge-otimo'
 
 
-def render_barra_empilhada(v1, v2, chart_key):
+def render_barra_empilhada(v1, v2, chart_key, cor_secundaria='#ff5252'):
   fig = go.Figure()
   fig.add_trace(
       go.Bar(
           y=['GERAL'],
           x=[v1],
           orientation='h',
-          width=0.6,
+          width=0.7,
           text=[f'{v1}'],
           textposition='inside',
           insidetextanchor='middle',
-          textfont=dict(color='#000000', size=13, family='sans-serif'),
+          textfont=dict(color='#000000', size=14, family='sans-serif'),
           marker=dict(color='#00e676', cornerradius=10),
       )
   )
@@ -407,17 +410,17 @@ def render_barra_empilhada(v1, v2, chart_key):
           y=['GERAL'],
           x=[v2],
           orientation='h',
-          width=0.6,
+          width=0.7,
           text=[f'{v2}' if v2 > 0 else ''],
           textposition='inside',
           insidetextanchor='middle',
-          textfont=dict(color='#ffffff', size=13, family='sans-serif'),
-          marker=dict(color='#ff5252', cornerradius=10),
+          textfont=dict(color='#ffffff', size=14, family='sans-serif'),
+          marker=dict(color=cor_secundaria, cornerradius=10),
       )
   )
   fig.update_layout(
       barmode='stack',
-      height=36,
+      height=45,
       margin=dict(l=0, r=0, t=0, b=0),
       paper_bgcolor='rgba(0,0,0,0)',
       plot_bgcolor='rgba(0,0,0,0)',
@@ -440,11 +443,11 @@ def render_barra_empilhada_torre(v_np, v_ao, v_ad, v_ns, chart_key):
           y=['GERAL'],
           x=[v_np],
           orientation='h',
-          width=0.6,
+          width=0.7,
           text=[f'{v_np}' if v_np > 0 else ''],
           textposition='inside',
           insidetextanchor='middle',
-          textfont=dict(color='#000000', size=13, family='sans-serif'),
+          textfont=dict(color='#000000', size=14, family='sans-serif'),
           marker=dict(color='#00e676', cornerradius=10),
       )
   )
@@ -453,11 +456,11 @@ def render_barra_empilhada_torre(v_np, v_ao, v_ad, v_ns, chart_key):
           y=['GERAL'],
           x=[v_ao],
           orientation='h',
-          width=0.6,
+          width=0.7,
           text=[f'{v_ao}' if v_ao > 0 else ''],
           textposition='inside',
           insidetextanchor='middle',
-          textfont=dict(color='#000000', size=13, family='sans-serif'),
+          textfont=dict(color='#000000', size=14, family='sans-serif'),
           marker=dict(color='#ffeb3b', cornerradius=10),
       )
   )
@@ -466,11 +469,11 @@ def render_barra_empilhada_torre(v_np, v_ao, v_ad, v_ns, chart_key):
           y=['GERAL'],
           x=[v_ad],
           orientation='h',
-          width=0.6,
+          width=0.7,
           text=[f'{v_ad}' if v_ad > 0 else ''],
           textposition='inside',
           insidetextanchor='middle',
-          textfont=dict(color='#ffffff', size=13, family='sans-serif'),
+          textfont=dict(color='#ffffff', size=14, family='sans-serif'),
           marker=dict(color='#ff9800', cornerradius=10),
       )
   )
@@ -479,17 +482,17 @@ def render_barra_empilhada_torre(v_np, v_ao, v_ad, v_ns, chart_key):
           y=['GERAL'],
           x=[v_ns],
           orientation='h',
-          width=0.6,
+          width=0.7,
           text=[f'{v_ns}' if v_ns > 0 else ''],
           textposition='inside',
           insidetextanchor='middle',
-          textfont=dict(color='#ffffff', size=13, family='sans-serif'),
+          textfont=dict(color='#ffffff', size=14, family='sans-serif'),
           marker=dict(color='#ff5252', cornerradius=10),
       )
   )
   fig.update_layout(
       barmode='stack',
-      height=36,
+      height=45,
       margin=dict(l=0, r=0, t=0, b=0),
       paper_bgcolor='rgba(0,0,0,0)',
       plot_bgcolor='rgba(0,0,0,0)',
@@ -505,7 +508,9 @@ def render_barra_empilhada_torre(v_np, v_ao, v_ad, v_ns, chart_key):
   )
 
 
-def render_mini_barras(lista_dados, prefix_key):
+def render_mini_barras(
+    lista_dados, prefix_key, cor_secundaria_mini='#ff5252'
+):
   col1, col2, col3 = st.columns(3)
   cols = [col1, col2, col3]
   for i, item in enumerate(lista_dados):
@@ -515,7 +520,7 @@ def render_mini_barras(lista_dados, prefix_key):
       perc = item.get('%', 0.0)
       _, cor_p, _ = get_status_e_cor(perc)
 
-      c_cli, c_bar, c_txt = st.columns([0.25, 0.60, 0.15])
+      c_cli, c_bar, c_txt = st.columns([0.22, 0.66, 0.12])
       with c_cli:
         st.markdown(
             f"<div style='font-size:12px; font-weight:700; color:#ffffff;"
@@ -530,7 +535,7 @@ def render_mini_barras(lista_dados, prefix_key):
                 y=[''],
                 x=[real],
                 orientation='h',
-                width=0.6,
+                width=0.7,
                 text=[f'{real}'],
                 textposition='inside',
                 insidetextanchor='middle',
@@ -543,17 +548,17 @@ def render_mini_barras(lista_dados, prefix_key):
                 y=[''],
                 x=[pend],
                 orientation='h',
-                width=0.6,
+                width=0.7,
                 text=[f'{pend}' if pend > 0 else ''],
                 textposition='inside',
                 insidetextanchor='middle',
                 textfont=dict(color='#ffffff', size=11, family='sans-serif'),
-                marker=dict(color='#ff5252', cornerradius=10),
+                marker=dict(color=cor_secundaria_mini, cornerradius=10),
             )
         )
         fig.update_layout(
             barmode='stack',
-            height=30,
+            height=32,
             margin=dict(l=0, r=0, t=0, b=0),
             paper_bgcolor='rgba(0,0,0,0)',
             plot_bgcolor='rgba(0,0,0,0)',
@@ -570,13 +575,18 @@ def render_mini_barras(lista_dados, prefix_key):
       with c_txt:
         st.markdown(
             f"<div style='font-size:12px; font-weight:800; color:{cor_p};"
-            f" text-align:left; padding-left:4px;"
+            f" text-align:left; padding-left:2px;"
             f" padding-top:5px;'>{perc:.0f}%</div>",
             unsafe_allow_html=True,
         )
 
 
-def render_tab_content(state_key, prefix_key):
+def render_tab_content(
+    state_key,
+    prefix_key,
+    rotulo_pendente='PENDENTES',
+    cor_grafico_pendente='#ff5252',
+):
   tot_qtd, tot_real = 0, 0
   dados_processados = []
 
@@ -634,7 +644,7 @@ def render_tab_content(state_key, prefix_key):
   c3.markdown(
       f"""
         <div class="kpi-card">
-            <div class="kpi-title">PENDENTES</div>
+            <div class="kpi-title">{rotulo_pendente}</div>
             <div class="kpi-value-red">{tot_pend}</div>
         </div>
     """,
@@ -657,24 +667,31 @@ def render_tab_content(state_key, prefix_key):
   )
 
   st.markdown(
-      """
+      f"""
         <div class="charts-card">
             <div class="charts-header">
-                <div class="charts-title">REALIZADAS vs PENDENTES</div>
+                <div class="charts-title">REALIZADAS vs {rotulo_pendente}</div>
                 <div class="charts-legend">
                     <span style="color:#00e676;">● REALIZADAS</span>
-                    <span style="color:#ff5252;">● PENDENTES</span>
+                    <span style="color:{cor_grafico_pendente};">● {rotulo_pendente}</span>
                 </div>
             </div>
     """,
       unsafe_allow_html=True,
   )
 
-  render_barra_empilhada(tot_real, tot_pend, f'stack_bar_{prefix_key}')
+  render_barra_empilhada(
+      tot_real,
+      tot_pend,
+      f'stack_bar_{prefix_key}',
+      cor_secundaria=cor_grafico_pendente,
+  )
   st.markdown(
       "<div style='margin-bottom: 20px;'></div>", unsafe_allow_html=True
   )
-  render_mini_barras(dados_processados, prefix_key)
+  render_mini_barras(
+      dados_processados, prefix_key, cor_secundaria_mini=cor_grafico_pendente
+  )
   st.markdown('</div>', unsafe_allow_html=True)
 
   st.markdown('<div class="card-floating">', unsafe_allow_html=True)
@@ -692,7 +709,8 @@ def render_tab_content(state_key, prefix_key):
       unsafe_allow_html=True,
   )
   h4.markdown(
-      '<div class="th-title" style="text-align:center;">PENDENTES</div>',
+      f'<div class="th-title"'
+      f' style="text-align:center;">{rotulo_pendente}</div>',
       unsafe_allow_html=True,
   )
   h5.markdown('<div class="th-title">%</div>', unsafe_allow_html=True)
@@ -1080,10 +1098,20 @@ st.markdown(
 tab1, tab2, tab3 = st.tabs(['CADASTRO', 'GER. RISCO', 'TORRE MULTI'])
 
 with tab1:
-  render_tab_content('dados_cad', 'cad')
+  render_tab_content(
+      'dados_cad',
+      'cad',
+      rotulo_pendente='PENDENTES',
+      cor_grafico_pendente='#ff5252',
+  )
 
 with tab2:
-  render_tab_content('dados_risco', 'risco')
+  render_tab_content(
+      'dados_risco',
+      'risco',
+      rotulo_pendente='CANCELADOS',
+      cor_grafico_pendente='#ff5252',
+  )
 
 with tab3:
   render_torre_multi()
