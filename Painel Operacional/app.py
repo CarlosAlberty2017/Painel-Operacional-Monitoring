@@ -215,11 +215,15 @@ st.markdown(
         background-color: #10141d;
         border: 1px solid #1c222e;
         border-radius: 14px;
-        padding: 20px 24px;
+        padding: 20px 12px;
         margin-bottom: 20px;
+        width: 100%;
+        box-sizing: border-box;
     }
     .charts-header {
         display: flex;
+        width: 100%;
+        box-sizing: border-box;
         justify-content: space-between;
         align-items: center;
         margin-bottom: 16px;
@@ -371,7 +375,7 @@ def render_barra_empilhada(v1, v2, chart_key):
     st.plotly_chart(
         fig,
         use_container_width=True,
-        config={'displayModeBar': False},
+        config={'displayModeBar': False, 'responsive': True},
         key=chart_key,
     )
 
@@ -443,7 +447,7 @@ def render_barra_empilhada_torre(v1, v2, v3, v4, chart_key):
     st.plotly_chart(
         fig,
         use_container_width=True,
-        config={'displayModeBar': False},
+        config={'displayModeBar': False, 'responsive': True},
         key=chart_key,
     )
 
@@ -458,7 +462,7 @@ def render_mini_barras(lista_dados, prefix_key):
             perc = item['%']
             _, cor_p, _ = get_status_e_cor(perc)
 
-            c_cli, c_bar, c_txt = st.columns([0.25, 0.60, 0.15])
+            c_cli, c_bar, c_txt = st.columns([0.20, 0.72, 0.08])
             with c_cli:
                 st.markdown(
                     f"<div style='font-size:12px; font-weight:700; color:#ffffff;"
@@ -495,7 +499,7 @@ def render_mini_barras(lista_dados, prefix_key):
                 )
                 fig.update_layout(
                     barmode='stack',
-                    height=30,
+                    height=34,
                     margin=dict(l=0, r=0, t=0, b=0),
                     paper_bgcolor='rgba(0,0,0,0)',
                     plot_bgcolor='rgba(0,0,0,0)',
@@ -506,7 +510,7 @@ def render_mini_barras(lista_dados, prefix_key):
                 st.plotly_chart(
                     fig,
                     use_container_width=True,
-                    config={'displayModeBar': False},
+                    config={'displayModeBar': False, 'responsive': True},
                     key=f'mini_bar_{prefix_key}_{i}',
                 )
             with c_txt:
