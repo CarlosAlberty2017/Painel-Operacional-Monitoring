@@ -8,7 +8,7 @@ from datetime import date, datetime
 
 # =========================
 # PERSISTÊNCIA / HISTÓRICO T3
-# =========================
+# ===========git status==============
 # Em execução local, o histórico é salvo em JSON ao lado do app.
 # Em hospedagens com filesystem efêmero, configure uma fonte persistente
 # (ex.: banco/planilha) para retenção definitiva entre reinicializações.
